@@ -1,0 +1,1810 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Bonafide Certificate Generator</title>
+
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            padding: 20px;
+            font-family: Arial, sans-serif;
+            background: #f2f2f2;
+        }
+
+        .container {
+            max-width: 1100px;
+            margin: auto;
+        }
+
+        /* ================= FORM ================= */
+
+        .form-box {
+            background: white;
+            padding: 25px;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        h2 {
+            text-align: center;
+            margin-bottom: 25px;
+        }
+
+        .form-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 15px;
+        }
+
+        .form-group {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .form-group label {
+            font-weight: bold;
+            margin-bottom: 6px;
+        }
+
+        .form-group input,
+        .form-group select {
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            font-size: 15px;
+        }
+
+        .btn {
+            margin-top: 20px;
+            padding: 12px 25px;
+            border: none;
+            border-radius: 5px;
+            background: #007bff;
+            color: white;
+            font-size: 16px;
+            cursor: pointer;
+        }
+
+        .btn:hover {
+            background: #0056b3;
+        }
+
+
+        /* ================= CERTIFICATE ================= */
+
+        #certificate {
+            visibility: hidden;
+            margin: 30px auto;
+            padding: 45px;
+            max-width: 1000px;
+            background: white;
+            border: 1px solid #000;
+
+            font-family: "Times New Roman", serif;
+            color: #000;
+        }
+
+        .certificate-header {
+            text-align: center;
+        }
+
+        .certificate-header h1 {
+            margin: 5px 0;
+            font-size: 27px;
+        }
+
+        .certificate-header h2 {
+            margin: 5px 0;
+            font-size: 20px;
+        }
+
+        .certificate-header p {
+            margin: 3px 0;
+            font-size: 14px;
+        }
+
+        .logo {
+            width: 90px;
+            height: 90px;
+            object-fit: contain;
+        }
+
+        .ref-date {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 35px;
+            font-size: 15px;
+        }
+
+        .title {
+            text-align: center;
+            margin: 45px 0 35px;
+            font-weight: bold;
+            font-size: 20px;
+            text-decoration: underline;
+        }
+
+        .certificate-body {
+            font-size: 18px;
+            line-height: 1.8;
+            text-align: justify;
+        }
+
+        .certificate-body p {
+            margin-bottom: 20px;
+        }
+
+
+        /* ================= FEE TABLE ================= */
+
+        .fee-section {
+            margin-top: 30px;
+            page-break-inside: avoid;
+        }
+
+        .fee-title {
+            text-align: center;
+            font-size: 18px;
+            font-weight: bold;
+            margin-bottom: 10px;
+            text-decoration: underline;
+        }
+
+        .fee-table {
+            width: 100%;
+            border-collapse: collapse;
+            font-family: Arial, sans-serif;
+            font-size: 12px;
+            text-align: center;
+        }
+
+        .fee-table th,
+        .fee-table td {
+            border: 1px solid #000;
+            padding: 6px 4px;
+        }
+
+        .fee-table th {
+            font-weight: bold;
+        }
+
+        .fee-table td:first-child {
+            font-weight: bold;
+        }
+
+        .fee-table .gross-total td {
+            font-weight: bold;
+        }
+
+        .fee-table .scholarship td {
+            font-weight: bold;
+            text-align: left;
+        }
+
+        .fee-table .final-payable td {
+            font-weight: bold;
+        }
+
+
+        /* ================= BANK ================= */
+
+        .bank-details {
+            margin-top: 35px;
+            font-size: 15px;
+            line-height: 1.5;
+        }
+
+        .signature {
+            text-align: right;
+            margin-top: 60px;
+            font-weight: bold;
+            font-size: 16px;
+        }
+
+        #printBtnDiv {
+            visibility: hidden;
+            text-align: center;
+            margin: 20px;
+        }
+
+
+        /* ================= MOBILE ================= */
+
+        @media (max-width: 700px) {
+
+            .form-grid {
+                grid-template-columns: 1fr;
+            }
+
+            #certificate {
+                padding: 20px;
+            }
+
+            .ref-date {
+                flex-direction: column;
+                gap: 10px;
+            }
+
+            .fee-table {
+                font-size: 9px;
+            }
+
+            .fee-table th,
+            .fee-table td {
+                padding: 4px 2px;
+            }
+        }
+
+
+        /* ================= PRINT ================= */
+
+        @media print {
+
+            body {
+                background: white;
+                padding: 0;
+                margin: 0;
+            }
+
+            .container,
+            #printBtnDiv {
+                display: none !important;
+            }
+
+            #certificate {
+                visibility: visible !important;
+                display: block !important;
+
+                margin: 0;
+                padding: 35px;
+
+                border: none;
+
+                width: 100%;
+                max-width: none;
+            }
+
+            .fee-section {
+                page-break-inside: avoid;
+            }
+
+        }
+    </style>
+
+</head>
+
+
+<body>
+
+
+    <div class="container">
+
+
+        <!-- ================= FORM ================= -->
+
+        <div class="form-box">
+
+            <h2>Bonafide Certificate Generator</h2>
+
+
+            <div class="form-grid">
+
+
+                <!-- Student Name -->
+
+                <div class="form-group">
+
+                    <label for="student-name">
+                        Student Name
+                    </label>
+
+                    <input type="text" id="student-name" placeholder="Enter student name">
+
+                </div>
+
+
+                <!-- Father's Name -->
+
+                <div class="form-group">
+
+                    <label for="fathers-name">
+                        Father's Name
+                    </label>
+
+                    <input type="text" id="fathers-name" placeholder="Enter father's name">
+
+                </div>
+
+
+                <!-- Session -->
+
+                <div class="form-group">
+
+                    <label for="session">
+                        Session
+                    </label>
+
+                    <input type="text" id="session" placeholder="Example: 2025-26">
+
+                </div>
+
+
+                <!-- Course -->
+
+                <div class="form-group">
+
+                    <label for="course">
+                        Course
+                    </label>
+
+                    <select id="course">
+
+                        <option value="">
+                            Select Course
+                        </option>
+
+                        <option value="btech">
+                            B.Tech Engineering
+                        </option>
+
+                        <option value="polytechnic">
+                            Polytechnic (Diploma) Engineering
+                        </option>
+
+                    </select>
+
+                </div>
+
+
+                <!-- Admission Type -->
+
+                <div class="form-group">
+
+                    <label for="admission-type">
+                        Admission Type
+                    </label>
+
+                    <select id="admission-type">
+
+                        <option value="">
+                            Select Admission Type
+                        </option>
+
+                        <option value="regular">
+                            Regular Course
+                        </option>
+
+                        <option value="le">
+                            Lateral Entry (LE) Course
+                        </option>
+
+                    </select>
+
+                </div>
+
+
+                <!-- Hostel / Day Scholar -->
+
+                <div class="form-group">
+
+                    <label for="student-type">
+                        Student Type
+                    </label>
+
+                    <select id="student-type">
+
+                        <option value="">
+                            Select Student Type
+                        </option>
+
+                        <option value="hostel">
+                            Hostel
+                        </option>
+
+                        <option value="day-scholar">
+                            Day Scholar
+                        </option>
+
+                    </select>
+
+                </div>
+
+
+                <!-- Branch -->
+
+                <div class="form-group">
+
+                    <label for="branch-select">
+                        Branch
+                    </label>
+
+                    <select id="branch-select">
+
+                        <option value="">
+                            Select Branch
+                        </option>
+
+                        <option value="Civil Engineering">
+                            Civil Engineering
+                        </option>
+
+                        <option value="Electrical Engineering">
+                            Electrical Engineering
+                        </option>
+
+                        <option value="Computer Science & Engineering">
+                            Computer Science & Engineering
+                        </option>
+
+                        <option value="Mechanical Engineering">
+                            Mechanical Engineering
+                        </option>
+
+                        <option value="Electronics Engineering">
+                            Electronics Engineering
+                        </option>
+
+                    </select>
+
+                </div>
+
+
+                <!-- Roll No -->
+
+                <div class="form-group">
+
+                    <label for="roll-no">
+                        Roll No
+                    </label>
+
+                    <input type="text" id="roll-no" placeholder="Enter roll number">
+
+                </div>
+
+
+                <!-- Gender -->
+
+                <div class="form-group">
+
+                    <label for="gender">
+                        Gender
+                    </label>
+
+                    <select id="gender">
+
+                        <option value="">
+                            Select Gender
+                        </option>
+
+                        <option value="male">
+                            Male
+                        </option>
+
+                        <option value="female">
+                            Female
+                        </option>
+
+                    </select>
+
+                </div>
+
+
+            </div>
+
+
+            <div style="text-align:center;">
+
+                <button class="btn" onclick="generateCertificate()">
+                    Generate Certificate
+                </button>
+
+            </div>
+
+        </div>
+
+
+
+        <!-- ================= CERTIFICATE ================= -->
+
+        <div id="certificate">
+
+
+            <!-- HEADER -->
+
+            <div class="certificate-header">
+
+
+                <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/3/3f/Placeholder_view_vector.svg/1200px-Placeholder_view_vector.svg.png"
+                    class="logo" alt="College Logo">
+
+
+                <h1>
+                    BUDDHA INSTITUTE OF TECHNOLOGY
+                </h1>
+
+
+                <h2>
+                    GAYA, BIHAR
+                </h2>
+
+
+                <p>
+                    Approved by AICTE, New Delhi & Affiliated to
+                    BEU, Patna / SBTE, Patna
+                </p>
+
+
+                <p>
+                    Industrial Area, Gaya, Bihar - 824231
+                </p>
+
+
+            </div>
+
+
+
+            <!-- REF & DATE -->
+
+            <div class="ref-date">
+
+
+                <div>
+
+                    <strong>
+                        Ref No:
+                    </strong>
+
+                    <span id="certRef"></span>
+
+                </div>
+
+
+                <div>
+
+                    <strong>
+                        Date:
+                    </strong>
+
+                    <span id="certDate"></span>
+
+                </div>
+
+
+            </div>
+
+
+
+            <!-- TITLE -->
+
+            <div class="title">
+
+                TO WHOM IT MAY CONCERN
+
+            </div>
+
+
+
+            <!-- BODY -->
+
+            <div class="certificate-body">
+
+
+                <p>
+
+                    Certified that
+                    <strong id="certName"></strong>,
+
+                    <span id="certRelation"></span>
+
+                    <strong id="certFather"></strong>,
+
+                    had been admitted during the session
+
+                    <strong id="certSession"></strong>
+
+                    in the branch of
+
+                    <strong id="certBranch"></strong>
+
+                    bearing Roll No –
+
+                    <strong id="certRoll"></strong>.
+
+                    <span id="certPronoun"></span>
+
+                    is a bonafide student of this institution.
+
+                </p>
+
+
+                <p id="courseDetails"></p>
+
+
+                <p id="admissionDetails"></p>
+
+
+            </div>
+
+
+
+            <!-- ================= FEE TABLE ================= -->
+
+            <div id="feeSection" class="fee-section">
+
+            </div>
+
+
+
+            <!-- ================= BANK ================= -->
+
+            <div class="bank-details">
+
+                <strong>
+                    Bank Details:
+                </strong>
+
+                <br>
+
+                Account Name:
+                Buddha Institute of Technology
+
+                <br>
+
+                Bank Name:
+                State Bank of India
+
+                <br>
+
+                Branch:
+                Gaya
+
+                <br>
+
+                IFSC Code:
+                SBIN0000000
+
+            </div>
+
+
+
+            <!-- SIGNATURE -->
+
+            <div class="signature">
+
+                Principal
+
+                <br>
+
+                Buddha Institute of Technology
+
+                <br>
+
+                Gaya
+
+            </div>
+
+
+        </div>
+
+
+
+        <!-- PRINT BUTTON -->
+
+        <div id="printBtnDiv">
+
+            <button class="btn" onclick="window.print()">
+                Print Certificate
+            </button>
+
+        </div>
+
+
+    </div>
+
+
+
+    <script>
+
+
+        /* =========================================================
+           FEE TABLE DATA
+           ========================================================= */
+
+
+        const feeTables = {
+
+
+            /* =====================================================
+               DIPLOMA REGULAR WITH HOSTEL
+               ===================================================== */
+
+            "polytechnic-regular-hostel": `
+
+        <div class="fee-title">
+            Diploma (Regular) with Hostel
+        </div>
+
+        <table class="fee-table">
+
+            <tr>
+
+                <th colspan="8">
+                    Diploma (Regular) with Hostel
+                </th>
+
+            </tr>
+
+            <tr>
+
+                <th>Year</th>
+                <th>Tuition Fee</th>
+                <th>Admission Fee</th>
+                <th>Exam Fee</th>
+                <th>Educational Kit</th>
+                <th>SBTE Registration</th>
+                <th>Hostel Fee</th>
+                <th>Total Fee</th>
+
+            </tr>
+
+            <tr>
+
+                <td>1st</td>
+                <td>66,000</td>
+                <td>11,000</td>
+                <td>3,000</td>
+                <td>5,100</td>
+                <td>800</td>
+                <td>72,000</td>
+                <td>157,900</td>
+
+            </tr>
+
+            <tr>
+
+                <td>2nd</td>
+                <td>66,000</td>
+                <td>-</td>
+                <td>3,000</td>
+                <td>-</td>
+                <td>-</td>
+                <td>72,000</td>
+                <td>141,000</td>
+
+            </tr>
+
+            <tr>
+
+                <td>3rd</td>
+                <td>66,000</td>
+                <td>-</td>
+                <td>3,000</td>
+                <td>-</td>
+                <td>-</td>
+                <td>72,000</td>
+                <td>141,000</td>
+
+            </tr>
+
+            <tr class="gross-total">
+
+                <td colspan="7">
+                    Gross Total
+                </td>
+
+                <td>
+                    439,900
+                </td>
+
+            </tr>
+
+        </table>
+
+    `,
+
+
+            /* =====================================================
+               DIPLOMA LE WITH HOSTEL
+               ===================================================== */
+
+            "polytechnic-le-hostel": `
+
+        <div class="fee-title">
+            Diploma (LE) with Hostel
+        </div>
+
+        <table class="fee-table">
+
+            <tr>
+
+                <th colspan="8">
+                    Diploma (LE) with Hostel
+                </th>
+
+            </tr>
+
+            <tr>
+
+                <th>Year</th>
+                <th>Tuition Fee</th>
+                <th>Admission Fee</th>
+                <th>Exam Fee</th>
+                <th>Educational Kit</th>
+                <th>SBTE Registration</th>
+                <th>Hostel Fee</th>
+                <th>Total Fee</th>
+
+            </tr>
+
+            <tr>
+
+                <td>1st</td>
+                <td>60,000</td>
+                <td>11,000</td>
+                <td>3,000</td>
+                <td>5,100</td>
+                <td>800</td>
+                <td>72,000</td>
+                <td>151,900</td>
+
+            </tr>
+
+            <tr>
+
+                <td>2nd</td>
+                <td>60,000</td>
+                <td>-</td>
+                <td>3,000</td>
+                <td>-</td>
+                <td>-</td>
+                <td>72,000</td>
+                <td>135,000</td>
+
+            </tr>
+
+            <tr class="gross-total">
+
+                <td colspan="7">
+                    Gross Total
+                </td>
+
+                <td>
+                    286,900
+                </td>
+
+            </tr>
+
+        </table>
+
+    `,
+
+
+            /* =====================================================
+               DIPLOMA REGULAR WITHOUT HOSTEL
+               ===================================================== */
+
+            "polytechnic-regular-day-scholar": `
+
+        <div class="fee-title">
+            Diploma (Regular) without Hostel
+        </div>
+
+        <table class="fee-table">
+
+            <tr>
+
+                <th colspan="7">
+                    Diploma (Regular) without Hostel
+                </th>
+
+            </tr>
+
+            <tr>
+
+                <th>Year</th>
+                <th>Tuition Fee</th>
+                <th>Admission Fee</th>
+                <th>Exam Fee</th>
+                <th>Educational Kit</th>
+                <th>SBTE Registration</th>
+                <th>Total Fee</th>
+
+            </tr>
+
+            <tr>
+
+                <td>1st</td>
+                <td>66,000</td>
+                <td>11,000</td>
+                <td>3,000</td>
+                <td>5,100</td>
+                <td>800</td>
+                <td>85,900</td>
+
+            </tr>
+
+            <tr>
+
+                <td>2nd</td>
+                <td>66,000</td>
+                <td>-</td>
+                <td>3,000</td>
+                <td>-</td>
+                <td>-</td>
+                <td>69,000</td>
+
+            </tr>
+
+            <tr>
+
+                <td>3rd</td>
+                <td>66,000</td>
+                <td>-</td>
+                <td>3,000</td>
+                <td>-</td>
+                <td>-</td>
+                <td>69,000</td>
+
+            </tr>
+
+            <tr class="gross-total">
+
+                <td colspan="6">
+                    Gross Total
+                </td>
+
+                <td>
+                    223,900
+                </td>
+
+            </tr>
+
+        </table>
+
+    `,
+
+
+            /* =====================================================
+               DIPLOMA LE WITHOUT HOSTEL
+               ===================================================== */
+
+            "polytechnic-le-day-scholar": `
+
+        <div class="fee-title">
+            Diploma (LE) without Hostel
+        </div>
+
+        <table class="fee-table">
+
+            <tr>
+
+                <th colspan="7">
+                    Diploma LE without Hostel
+                </th>
+
+            </tr>
+
+            <tr>
+
+                <th>Year</th>
+                <th>Tuition Fee</th>
+                <th>Admission Fee</th>
+                <th>Exam Fee</th>
+                <th>Educational Kit</th>
+                <th>SBTE Registration</th>
+                <th>Total Fee</th>
+
+            </tr>
+
+            <tr>
+
+                <td>1st</td>
+                <td>60,000</td>
+                <td>11,000</td>
+                <td>3,000</td>
+                <td>5,100</td>
+                <td>800</td>
+                <td>79,900</td>
+
+            </tr>
+
+            <tr>
+
+                <td>2nd</td>
+                <td>60,000</td>
+                <td>-</td>
+                <td>3,000</td>
+                <td>-</td>
+                <td>-</td>
+                <td>63,000</td>
+
+            </tr>
+
+            <tr class="gross-total">
+
+                <td colspan="6">
+                    Gross Total
+                </td>
+
+                <td>
+                    142,900
+                </td>
+
+            </tr>
+
+        </table>
+
+    `,
+
+
+            /* =====================================================
+               B.TECH REGULAR WITH HOSTEL
+               ===================================================== */
+
+            "btech-regular-hostel": `
+
+        <div class="fee-title">
+            B.Tech (Regular) with Hostel
+        </div>
+
+        <table class="fee-table">
+
+            <tr>
+
+                <th colspan="8">
+                    B.Tech (Regular) with Hostel
+                </th>
+
+            </tr>
+
+            <tr>
+
+                <th>Year</th>
+                <th>Tuition Fee</th>
+                <th>Admission Fee</th>
+                <th>Exam Fee</th>
+                <th>Educational Kit</th>
+                <th>BEU Registration</th>
+                <th>Hostel Fee</th>
+                <th>Total Fee</th>
+
+            </tr>
+
+            <tr>
+
+                <td>1st</td>
+                <td>82,000</td>
+                <td>11,000</td>
+                <td>7,400</td>
+                <td>5,100</td>
+                <td>2,000</td>
+                <td>72,000</td>
+                <td>179,500</td>
+
+            </tr>
+
+            <tr>
+
+                <td>2nd</td>
+                <td>82,000</td>
+                <td>-</td>
+                <td>7,400</td>
+                <td>-</td>
+                <td>-</td>
+                <td>72,000</td>
+                <td>161,400</td>
+
+            </tr>
+
+            <tr>
+
+                <td>3rd</td>
+                <td>82,000</td>
+                <td>-</td>
+                <td>7,400</td>
+                <td>-</td>
+                <td>-</td>
+                <td>72,000</td>
+                <td>161,400</td>
+
+            </tr>
+
+            <tr>
+
+                <td>4th</td>
+                <td>82,000</td>
+                <td>-</td>
+                <td>7,400</td>
+                <td>-</td>
+                <td>-</td>
+                <td>72,000</td>
+                <td>161,400</td>
+
+            </tr>
+
+            <tr class="gross-total">
+
+                <td colspan="7">
+                    Gross Total
+                </td>
+
+                <td>
+                    663,700
+                </td>
+
+            </tr>
+
+        </table>
+
+    `,
+
+
+            /* =====================================================
+               B.TECH LE WITH HOSTEL
+               ===================================================== */
+
+            "btech-le-hostel": `
+
+        <div class="fee-title">
+            B.Tech (LE) with Hostel
+        </div>
+
+        <table class="fee-table">
+
+            <tr>
+
+                <th colspan="8">
+                    B.Tech (LE) with Hostel
+                </th>
+
+            </tr>
+
+            <tr>
+
+                <th>Year</th>
+                <th>Tuition Fee</th>
+                <th>Admission Fee</th>
+                <th>Exam Fee</th>
+                <th>Educational Kit</th>
+                <th>BEU Registration</th>
+                <th>Hostel Fee</th>
+                <th>Total Fee</th>
+
+            </tr>
+
+            <tr>
+
+                <td>2nd</td>
+                <td>75,000</td>
+                <td>11,000</td>
+                <td>7,400</td>
+                <td>5,100</td>
+                <td>2,000</td>
+                <td>72,000</td>
+                <td>172,500</td>
+
+            </tr>
+
+            <tr>
+
+                <td>3rd</td>
+                <td>75,000</td>
+                <td>-</td>
+                <td>7,400</td>
+                <td>-</td>
+                <td>-</td>
+                <td>72,000</td>
+                <td>154,400</td>
+
+            </tr>
+
+            <tr>
+
+                <td>4th</td>
+                <td>75,000</td>
+                <td>-</td>
+                <td>7,400</td>
+                <td>-</td>
+                <td>-</td>
+                <td>72,000</td>
+                <td>154,400</td>
+
+            </tr>
+
+            <tr class="gross-total">
+
+                <td colspan="7">
+                    Gross Total
+                </td>
+
+                <td>
+                    481,300
+                </td>
+
+            </tr>
+
+        </table>
+
+    `,
+
+
+            /* =====================================================
+               B.TECH REGULAR WITHOUT HOSTEL
+               ===================================================== */
+
+            "btech-regular-day-scholar": `
+
+        <div class="fee-title">
+            B.Tech (Regular) without Hostel
+        </div>
+
+        <table class="fee-table">
+
+            <tr>
+
+                <th colspan="7">
+                    B.Tech (Regular) without Hostel
+                </th>
+
+            </tr>
+
+            <tr>
+
+                <th>Year</th>
+                <th>Tuition Fee</th>
+                <th>Admission Fee</th>
+                <th>Exam Fee</th>
+                <th>Educational Kit</th>
+                <th>BEU Registration</th>
+                <th>Total Fee</th>
+
+            </tr>
+
+            <tr>
+
+                <td>1st</td>
+                <td>82,000</td>
+                <td>11,000</td>
+                <td>7,400</td>
+                <td>5,100</td>
+                <td>2,000</td>
+                <td>107,500</td>
+
+            </tr>
+
+            <tr>
+
+                <td>2nd</td>
+                <td>82,000</td>
+                <td>-</td>
+                <td>7,400</td>
+                <td>-</td>
+                <td>-</td>
+                <td>89,400</td>
+
+            </tr>
+
+            <tr>
+
+                <td>3rd</td>
+                <td>82,000</td>
+                <td>-</td>
+                <td>7,400</td>
+                <td>-</td>
+                <td>-</td>
+                <td>89,400</td>
+
+            </tr>
+
+            <tr>
+
+                <td>4th</td>
+                <td>82,000</td>
+                <td>-</td>
+                <td>7,400</td>
+                <td>-</td>
+                <td>-</td>
+                <td>89,400</td>
+
+            </tr>
+
+            <tr class="gross-total">
+
+                <td colspan="6">
+                    Gross Total
+                </td>
+
+                <td>
+                    375,700
+                </td>
+
+            </tr>
+
+        </table>
+
+    `,
+
+
+            /* =====================================================
+               B.TECH LE WITHOUT HOSTEL
+               ===================================================== */
+
+            "btech-le-day-scholar": `
+
+        <div class="fee-title">
+            B.Tech LE without Hostel
+        </div>
+
+        <table class="fee-table">
+
+            <tr>
+
+                <th colspan="7">
+                    B.Tech LE without Hostel
+                </th>
+
+            </tr>
+
+            <tr>
+
+                <th>Year</th>
+                <th>Tuition Fee</th>
+                <th>Admission Fee</th>
+                <th>Exam Fee</th>
+                <th>Educational Kit</th>
+                <th>BEU Registration</th>
+                <th>Total Fee</th>
+
+            </tr>
+
+            <tr>
+
+                <td>2nd</td>
+                <td>75,000</td>
+                <td>11,000</td>
+                <td>7,400</td>
+                <td>5,100</td>
+                <td>2,000</td>
+                <td>100,500</td>
+
+            </tr>
+
+            <tr>
+
+                <td>3rd</td>
+                <td>75,000</td>
+                <td>-</td>
+                <td>7,400</td>
+                <td>-</td>
+                <td>-</td>
+                <td>82,400</td>
+
+            </tr>
+
+            <tr>
+
+                <td>4th</td>
+                <td>75,000</td>
+                <td>-</td>
+                <td>7,400</td>
+                <td>-</td>
+                <td>-</td>
+                <td>82,400</td>
+
+            </tr>
+
+            <tr class="gross-total">
+
+                <td colspan="6">
+                    Gross Total
+                </td>
+
+                <td>
+                    265,300
+                </td>
+
+            </tr>
+
+            <tr class="scholarship">
+
+                <td colspan="6">
+                    Scholarship (Government / College / Others):
+                    Rs. 16,000 per year x 3 years
+                    (Adjusted against Tuition Fee;
+                    subject to scholarship conditions.)
+                </td>
+
+                <td>
+                    - 48,000
+                </td>
+
+            </tr>
+
+            <tr class="final-payable">
+
+                <td colspan="6">
+                    Final Payable Fee after Scholarship
+                </td>
+
+                <td>
+                    217,300
+                </td>
+
+            </tr>
+
+        </table>
+
+    `
+
+        };
+
+
+
+        /* =========================================================
+           GENERATE CERTIFICATE
+           ========================================================= */
+
+
+        function generateCertificate() {
+
+
+            /* ================= GET VALUES ================= */
+
+            const studentName =
+                document.getElementById("student-name").value.trim();
+
+
+            const fatherName =
+                document.getElementById("fathers-name").value.trim();
+
+
+            const session =
+                document.getElementById("session").value.trim();
+
+
+            const course =
+                document.getElementById("course").value;
+
+
+            const admissionType =
+                document.getElementById("admission-type").value;
+
+
+            const studentType =
+                document.getElementById("student-type").value;
+
+
+            const branch =
+                document.getElementById("branch-select").value;
+
+
+            const rollNo =
+                document.getElementById("roll-no").value.trim();
+
+
+            const gender =
+                document.getElementById("gender").value;
+
+
+
+            /* ================= VALIDATION ================= */
+
+            if (
+                !studentName ||
+                !fatherName ||
+                !session ||
+                !course ||
+                !admissionType ||
+                !studentType ||
+                !branch ||
+                !rollNo ||
+                !gender
+            ) {
+
+                alert(
+                    "Please fill all the required fields."
+                );
+
+                return;
+
+            }
+
+
+
+            /* ================= GENDER ================= */
+
+            let pronoun = "";
+            let relation = "";
+
+
+            if (gender === "male") {
+
+                pronoun = "He";
+                relation = "S/o";
+
+            } else {
+
+                pronoun = "She";
+                relation = "D/o";
+
+            }
+
+
+
+            /* ================= COURSE DETAILS ================= */
+
+            let boardUniv = "";
+            let aicteId = "";
+            let approvalDate = "";
+            let affiliationNo = "";
+            let affiliationDate = "";
+            let website = "";
+            let email = "";
+
+
+            if (course === "btech") {
+
+
+                boardUniv =
+                    "BEU, Patna";
+
+
+                aicteId =
+                    "Northern/1-46221468337/2026/ EOA/Corrigendum-1";
+
+
+                approvalDate =
+                    "Dated-25-May-2026";
+
+
+                affiliationNo =
+                    "BEU/657/2026/Patna";
+
+
+                affiliationDate =
+                    "Dated-10-Jun-2026";
+
+
+                website =
+                    "www.bodhgayabit.net";
+
+
+                email =
+                    "bodhgayabitengg@gmail.com";
+
+
+            }
+
+
+            else if (course === "polytechnic") {
+
+
+                boardUniv =
+                    "SBTE, Patna";
+
+
+                aicteId =
+                    "F.No. Northern/1-46221468337/2026/ EOA/Corrigendum-1";
+
+
+                approvalDate =
+                    "Dated-25-May-2026";
+
+
+                affiliationNo =
+                    "S.B.T.E/174/16/25 /71625182/Patna";
+
+
+                affiliationDate =
+                    "Dated-10-June-2026";
+
+
+                website =
+                    "www.bodhgayabit.org";
+
+
+                email =
+                    "bodhgayabit@gmail.com";
+
+            }
+
+
+
+            /* ================= REFERENCE NUMBER ================= */
+
+            let ref = "";
+
+
+            if (session.includes("-")) {
+
+
+                const parts =
+                    session.split("-");
+
+
+                parts.forEach(part => {
+
+
+                    if (part.length >= 2) {
+
+                        ref += part.slice(-2);
+
+                    }
+
+                });
+
+
+            }
+
+            else {
+
+                ref =
+                    session.slice(-2);
+
+            }
+
+
+            const finalRef =
+                `BIT/2026/${branch}/${ref}${rollNo}`;
+
+
+
+            /* ================= CERTIFICATE VALUES ================= */
+
+            document.getElementById("certName").textContent =
+                studentName;
+
+
+            document.getElementById("certRelation").textContent =
+                relation;
+
+
+            document.getElementById("certFather").textContent =
+                fatherName;
+
+
+            document.getElementById("certSession").textContent =
+                session;
+
+
+            document.getElementById("certBranch").textContent =
+                branch;
+
+
+            document.getElementById("certRoll").textContent =
+                rollNo;
+
+
+            document.getElementById("certPronoun").textContent =
+                pronoun;
+
+
+            document.getElementById("certRef").textContent =
+                finalRef;
+
+
+            document.getElementById("certDate").textContent =
+                new Date().toLocaleDateString("en-GB");
+
+
+
+            /* ================= COURSE INFORMATION ================= */
+
+            const courseName =
+                course === "btech"
+                    ? "B.Tech Engineering"
+                    : "Polytechnic (Diploma) Engineering";
+
+
+            document.getElementById("courseDetails").innerHTML =
+
+                `The student is enrolled in the
+        <strong>${courseName}</strong>.
+        The institution is approved by AICTE vide
+        <strong>${aicteId}</strong>,
+        ${approvalDate}, and affiliated to
+        <strong>${boardUniv}</strong>
+        vide affiliation no.
+        <strong>${affiliationNo}</strong>,
+        ${affiliationDate}.
+        The official website is
+        <strong>${website}</strong>
+        and email is
+        <strong>${email}</strong>.`;
+
+
+
+            /* ================= ADMISSION DETAILS ================= */
+
+            const admissionText =
+                admissionType === "regular"
+                    ? "Regular Course"
+                    : "Lateral Entry (LE) Course";
+
+
+            const studentTypeText =
+                studentType === "hostel"
+                    ? "Hostel"
+                    : "Day Scholar";
+
+
+            document.getElementById("admissionDetails").innerHTML =
+
+                `The student has been admitted under
+        <strong>${admissionText}</strong>
+        and is registered as a
+        <strong>${studentTypeText}</strong>.`;
+
+
+
+            /* ================= FEE TABLE ================= */
+
+            const feeKey =
+                `${course}-${admissionType}-${studentType}`;
+
+
+            const feeSection =
+                document.getElementById("feeSection");
+
+
+            if (feeTables[feeKey]) {
+
+                feeSection.innerHTML =
+                    feeTables[feeKey];
+
+            } else {
+
+                feeSection.innerHTML = "";
+
+            }
+
+
+
+            /* ================= SHOW ================= */
+
+            document.getElementById("certificate").style.visibility =
+                "visible";
+
+
+            document.getElementById("printBtnDiv").style.visibility =
+                "visible";
+
+        }
+
+
+
+        /* =========================================================
+           RELOAD ON BACK/FORWARD CACHE
+           ========================================================= */
+
+        window.addEventListener(
+            "pageshow",
+            function (event) {
+
+                if (
+                    event.persisted ||
+                    performance.getEntriesByType("navigation")[0]?.type ===
+                    "back_forward"
+                ) {
+
+                    window.location.reload();
+
+                }
+
+            }
+        );
+
+    </script>
+
+
+</body>
+
+</html>
