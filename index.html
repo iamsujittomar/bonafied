@@ -248,103 +248,115 @@
     }
 
 
-    /* ================= FEE TABLE ================= */
+   /* ================= FEE TABLE ================= */
+
+.fee-section {
+    margin-top: 25px;
+    page-break-inside: avoid;
+    width: 100%;
+    overflow-x: auto;
+}
+
+.fee-title {
+    text-align: center;
+    font-size: 18px;
+    font-weight: bold;
+    margin-bottom: 10px;
+    text-decoration: underline;
+}
+
+.fee-table {
+    width: 100%;
+    max-width: 100%;
+    border-collapse: collapse;
+    border-spacing: 0;
+    table-layout: auto;
+
+    font-family: Arial, sans-serif;
+    font-size: 11px;
+    text-align: center;
+
+    margin: 0 auto;
+}
+
+.fee-table th,
+.fee-table td {
+    border: 1px solid #000;
+
+    padding: 5px 6px;
+
+    vertical-align: middle;
+
+    white-space: normal;
+    word-break: normal;
+    overflow-wrap: break-word;
+
+    line-height: 1.25;
+}
+
+.fee-table th {
+    font-weight: bold;
+    white-space: normal;
+}
+
+.fee-table td:first-child {
+    font-weight: bold;
+    white-space: nowrap;
+}
+
+.fee-table .gross-total td {
+    font-weight: bold;
+}
+
+.fee-table .scholarship td {
+    font-weight: bold;
+    text-align: left;
+}
+
+.fee-table .final-payable td {
+    font-weight: bold;
+}
+
+
+/* ================= PRINT TABLE ================= */
+
+@media print {
 
     .fee-section {
-
-        margin-top: 30px;
-
+        width: 100%;
+        margin-top: 20px;
         page-break-inside: avoid;
-
-        break-inside: avoid;
-
     }
-
-
-    .fee-title {
-
-        text-align: center;
-
-        font-size: 18px;
-
-        font-weight: bold;
-
-        margin-bottom: 10px;
-
-        text-decoration: underline;
-
-    }
-
 
     .fee-table {
-
         width: 100%;
+        max-width: 100%;
+        table-layout: auto;
 
-        border-collapse: collapse;
+        font-size: 10px;
 
-        font-family: Arial, sans-serif;
-
-        font-size: 12px;
-
-        text-align: center;
-
+        margin-left: auto;
+        margin-right: auto;
     }
-
 
     .fee-table th,
     .fee-table td {
-
-        border: 1px solid #000;
-
-        padding: 6px 4px;
-
+        padding: 4px 5px;
+        line-height: 1.2;
     }
-
 
     .fee-table th {
-
-        font-weight: bold;
-
+        white-space: normal;
     }
 
+    .fee-table td {
+        white-space: normal;
+    }
 
     .fee-table td:first-child {
-
-        font-weight: bold;
-
+        white-space: nowrap;
     }
-
-
-    .fee-table .gross-total td {
-
-        font-weight: bold;
-
-    }
-
-
-    .fee-table .scholarship td {
-
-        font-weight: bold;
-
-        text-align: left;
-
-    }
-
-
-    .fee-table .final-payable td {
-
-        font-weight: bold;
-
-    }
-
-
-    .fee-table tr {
-
-        page-break-inside: avoid;
-
-        break-inside: avoid;
-
-    }
+}
 
 
     /* ================= BANK ================= */
